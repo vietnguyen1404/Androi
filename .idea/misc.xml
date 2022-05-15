@@ -3,8 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Androi Studio Project/Hello/app/src/main/res/layout/activity_main.xml" value="0.22826086956521738" />
-        <entry key="..\:/Androi Studio Project/Hello/app/src/main/res/layout/activity_user.xml" value="0.10989583333333333" />
+        <entry key="..\:/Androi Studio Project/Hello/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Androi Studio Project/Hello/app/src/main/res/layout/activity_user.xml" value="0.2" />
+        <entry key="..\:/Androi Studio Project/Hello/app/src/main/res/layout/register.xml" value="0.21603260869565216" />
       </map>
     </option>
   </component>

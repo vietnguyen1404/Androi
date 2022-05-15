@@ -26,8 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     EditText m_edtUser,m_edtPass;
-    Button m_btnLogin;
-    static String userNameLogined;
+    Button m_btnLogin,m_btnRegister;
+    static String userNameLogined , passLogined;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -36,9 +36,12 @@ public class MainActivity extends AppCompatActivity {
 
         m_edtUser = (EditText)findViewById(R.id.edtUser);
         m_edtPass = (EditText)findViewById(R.id.edtPass);
-        m_btnLogin = (Button)findViewById(R.id.btnLogin);
 
+        m_btnLogin = (Button)findViewById(R.id.btnLogin);
         m_btnLogin.setOnClickListener(new CButtonLogin());
+        m_btnRegister = (Button)findViewById(R.id.btnRegister);
+        m_btnRegister.setOnClickListener(new CButtonRegister());
+
     }
 
     public class CButtonLogin implements View.OnClickListener {
@@ -59,26 +62,85 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    void apiLogin(String user, String pass) throws IOException {
+    public class CButtonRegister implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {//Hàm sử lý sự kiện click button register
+            Toast.makeText(getApplicationContext(),"CButtonRegister::onClick...",Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+            startActivity(i);
+        }
+    }
+
+    //Hàm mẫu sử dụng phương thức GET
+    void doGet(String url) throws IOException {
         OkHttpClient client = new OkHttpClient();
-        userNameLogined = user;
-        String json = "{\"username\":\"" + user + "\",\"password\":\"" + pass +"\"}";
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                call.cancel();
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String myResponse = response.body().string();
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //txtString.setText(myResponse);
+                        Log.d("K43",myResponse);
+                    }
+                });
+            }
+        });
+    }
+
+    //Hàm mẫu sử dụng phương thức POST
+    void doPost(String url,String json) throws IOException {
+        OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(JSON,json);
         Request request = new Request.Builder()
-                .url("http://172.16.2.84:3080/login")
+                .url(url)
                 .post(body)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("K40",e.toString());
                 call.cancel();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d("K40",response.body().string());
+                Log.d("K43",response.body().string());
+            }
+        });
+    }
+
+
+    void apiLogin(String user, String pass) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        userNameLogined = user;
+        passLogined = pass ;
+        String json = "{\"username\":\"" + user + "\",\"password\":\"" + pass +"\"}";
+        RequestBody body = RequestBody.create(JSON,json);
+        Request request = new Request.Builder()
+                .url("http://192.168.1.5:3080/login")
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("K42",e.toString());
+                call.cancel();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.d("K42",response.body().string());
                 if (!response.isSuccessful()){
                     MainActivity.this.runOnUiThread(new Runnable() {
                         @Override

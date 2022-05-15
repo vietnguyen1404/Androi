@@ -10,9 +10,9 @@ console.log('Welcome NODE!!!');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// app.get("/", function (res, req) {
-//     req.status(200).send("WELCOME GET METHOD ROOT")
-// })
+app.get("/", function (res, req) {
+    req.status(200).send("WELCOME GET METHOD ROOT")
+})
 
 // app.post("/login", function (res, req) {
 //     req.status(200).send("WELCOME GET METHOD Login")
